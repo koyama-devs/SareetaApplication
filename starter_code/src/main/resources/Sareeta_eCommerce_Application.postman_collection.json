@@ -9,11 +9,20 @@
 		{
 			"name": "1_login",
 			"request": {
+				"auth": {
+					"type": "bearer"
+				},
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"test\",\r\n    \"password\": \"somepassword\"\r\n}",
+					"raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"pass123456\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -21,12 +30,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/login",
+					"raw": "http://localhost:8080/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8082",
+					"port": "8080",
 					"path": [
 						"login"
 					]
@@ -41,7 +50,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"user1\"\r\n}",
+					"raw": "{\r\n    \"username\": \"user1\",\r\n    \"password\": \"pass123456\",\r\n    \"confirmPassword\": \"pass123456\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -65,13 +74,49 @@
 			"response": []
 		},
 		{
-			"name": "2_user/create Copy",
+			"name": "2_user/create user2",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"user2\"\r\n}",
+					"raw": "{\r\n    \"username\": \"user2\",\r\n    \"password\": \"pass456789\",\r\n    \"confirmPassword\": \"pass456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/user/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"user",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "2_user/create bad request test",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"user3\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -189,7 +234,62 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "3_addToCart",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"user1\",\r\n    \"itemId\":2,\r\n    \"quantity\":2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/cart/addToCart",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"cart",
+								"addToCart"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json;charset=UTF-8"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 05 Jun 2022 06:40:03 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 3,\n    \"items\": [\n        {\n            \"id\": 2,\n            \"name\": \"Square Widget\",\n            \"price\": 1.99,\n            \"description\": \"A widget that is square\"\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Square Widget\",\n            \"price\": 1.99,\n            \"description\": \"A widget that is square\"\n        }\n    ],\n    \"user\": {\n        \"id\": 3,\n        \"username\": \"user1\"\n    },\n    \"total\": 3.98\n}"
+				}
+			]
 		},
 		{
 			"name": "3_addToCart Copy",
