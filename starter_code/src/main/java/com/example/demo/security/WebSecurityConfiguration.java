@@ -1,5 +1,7 @@
 package com.example.demo.security;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +17,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	private UserDetailsServiceImpl userDetailsService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private static final Logger log = LogManager.getLogger(WebSecurityConfiguration.class);
 	
     public WebSecurityConfiguration(UserDetailsServiceImpl userDetailsService,
 			BCryptPasswordEncoder bCryptPasswordEncoder) {
@@ -24,6 +27,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        log.trace("[TRACE] configure(HttpSecurity http)");
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
                 .anyRequest().authenticated()
@@ -36,11 +40,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
+        log.trace("[TRACE] authenticationManagerBean()");
         return super.authenticationManagerBean();
     }
     
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        log.trace("[TRACE] configure()");
         auth.parentAuthenticationManager(authenticationManagerBean())
             .userDetailsService(userDetailsService)
             .passwordEncoder(bCryptPasswordEncoder);

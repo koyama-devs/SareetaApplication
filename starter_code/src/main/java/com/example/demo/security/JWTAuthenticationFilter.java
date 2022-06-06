@@ -1,12 +1,19 @@
 package com.example.demo.security;
 
 import com.auth0.jwt.JWT;
+import com.example.demo.controllers.UserController;
 import com.example.demo.model.persistence.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -22,6 +29,8 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	 private AuthenticationManager authenticationManager;
+
+    private static final Logger log = LogManager.getLogger(JWTAuthenticationFilter.class);
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -40,6 +49,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                             credentials.getPassword(),
                             new ArrayList<>()));
     	} catch (IOException e) {
+            log.error("[ERROR] Attempt Authentication Fail!!");
     		throw new RuntimeException(e);
     	}
     }

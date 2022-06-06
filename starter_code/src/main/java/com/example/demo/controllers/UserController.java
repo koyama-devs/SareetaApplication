@@ -1,5 +1,7 @@
 package com.example.demo.controllers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,8 @@ public class UserController {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+	private static final Logger log = LogManager.getLogger(UserController.class);
+
 	@GetMapping("/id/{id}")
 	public ResponseEntity<User> findById(@PathVariable Long id) {
 		return ResponseEntity.of(userRepository.findById(id));
@@ -50,6 +54,7 @@ public class UserController {
 		user.setCart(cart);
 		// Check username already exists
 		if(userRepository.findByUsername(createUserRequest.getUsername()) != null) {
+			log.warn("[WARN] Username is already exists!");
 			return ResponseEntity.badRequest().build();
 		}
 
@@ -57,10 +62,12 @@ public class UserController {
 		String password = createUserRequest.getPassword();
 		String confirmPassword = createUserRequest.getConfirmPassword();
 		if(password.length()<7 || !password.equals(confirmPassword)){
+			log.warn("[WARN] Password length is less than 7 or password does not match confirm password!");
 			return ResponseEntity.badRequest().build();
 		}
 		user.setPassword(bCryptPasswordEncoder.encode(password));
 		userRepository.save(user);
+		log.warn("[INFO] Create user successfully.");
 		return ResponseEntity.ok(user);
 	}
 	
