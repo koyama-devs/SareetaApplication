@@ -48,6 +48,11 @@ public class UserController {
 		Cart cart = new Cart();
 		cartRepository.save(cart);
 		user.setCart(cart);
+		// Check username already exists
+		if(userRepository.findByUsername(createUserRequest.getUsername()) != null) {
+			return ResponseEntity.badRequest().build();
+		}
+
 		// Get password and validate
 		String password = createUserRequest.getPassword();
 		String confirmPassword = createUserRequest.getConfirmPassword();

@@ -1,7 +1,9 @@
 package com.example.demo.model.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 public class ModifyCartRequest {
 	
 	@JsonProperty
@@ -12,6 +14,12 @@ public class ModifyCartRequest {
 	
 	@JsonProperty
 	private int quantity;
+
+	public ModifyCartRequest(String username, long itemId, int quantity) {
+		this.username = username;
+		this.itemId = itemId;
+		this.quantity = quantity;
+	}
 
 	public String getUsername() {
 		return username;

@@ -13,9 +13,11 @@ import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "item")
+@NoArgsConstructor
 public class Item {
 
 	@Id
@@ -58,6 +60,13 @@ public class Item {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public Item(Long id, String name, BigDecimal price, String description) {
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.description = description;
 	}
 
 	public Long getId() {
