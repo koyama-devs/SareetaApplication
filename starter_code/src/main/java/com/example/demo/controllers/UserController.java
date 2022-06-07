@@ -54,7 +54,7 @@ public class UserController {
 		user.setCart(cart);
 		// Check username already exists
 		if(userRepository.findByUsername(createUserRequest.getUsername()) != null) {
-			log.warn("[WARN] Username is already exists!");
+			log.error(String.format("[ERROR] Username %s is already exists!", user.getUsername()));
 			return ResponseEntity.badRequest().build();
 		}
 
@@ -62,12 +62,12 @@ public class UserController {
 		String password = createUserRequest.getPassword();
 		String confirmPassword = createUserRequest.getConfirmPassword();
 		if(password.length()<7 || !password.equals(confirmPassword)){
-			log.warn("[WARN] Password length is less than 7 or password does not match confirm password!");
+			log.error("[WARN] Password length is less than 7 or password does not match confirm password!");
 			return ResponseEntity.badRequest().build();
 		}
 		user.setPassword(bCryptPasswordEncoder.encode(password));
 		userRepository.save(user);
-		log.warn("[INFO] Create user successfully.");
+		log.info(String.format("[INFO] Create user with username is %s successfully.", user.getUsername()));
 		return ResponseEntity.ok(user);
 	}
 	
